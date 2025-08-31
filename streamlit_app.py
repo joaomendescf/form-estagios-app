@@ -1,24 +1,19 @@
 import streamlit as st
-import os
+import toml
 import json
 
-# Pega o conteúdo da variável de ambiente
-# credenciais_json = os.environ.get("GOOGLE_CREDENTIALS")
+# Carrega secrets
+secrets_dict = toml.loads(st.secrets.to_toml())
+credenciais = secrets_dict["google"]
 
-credenciais_json = os.environ["GOOGLE_CREDENTIALS"]
-credenciais = json.loads(credenciais_json)
-
-# Agora você pode usar as credenciais normalmente
-from google.oauth2 import service_account
-creds = service_account.Credentials.from_service_account_info(credenciais)
+# Se precisar do JSON para API do Google
+credenciais_json = json.dumps(credenciais)
 
 
 import gspread
 # from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
 from datetime import datetime
-
-
 
 # --- Conexão com Google Sheets ---
 scope = ["https://spreadsheets.google.com/feeds", 
