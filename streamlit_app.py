@@ -1,13 +1,12 @@
 import streamlit as st
-import toml
 import json
 
-# Carrega secrets
-secrets_dict = toml.loads(st.secrets.to_toml())
-credenciais = secrets_dict["google"]
+# Acessa o dicionário diretamente
+credenciais = st.secrets["google"]
 
-# Se precisar do JSON para API do Google
+# Se precisar passar para JSON (por exemplo, Google API)
 credenciais_json = json.dumps(credenciais)
+
 
 
 import gspread
