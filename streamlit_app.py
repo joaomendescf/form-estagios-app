@@ -1,16 +1,24 @@
-# import streamlit as st
-
-# st.title("🎈 My new app")
-# st.write(
-#     "Let's start building! For help and inspiration, head over to [docs.streamlit.io](https://docs.streamlit.io/)."
-# )
-
-
 import streamlit as st
+import os
+import json
+
+# Pega o conteúdo da variável de ambiente
+credenciais_json = os.environ.get("GOOGLE_CREDENTIALS")
+
+# Converte de string para dicionário
+credenciais = json.loads(credenciais_json)
+
+# Agora você pode usar as credenciais normalmente
+from google.oauth2 import service_account
+creds = service_account.Credentials.from_service_account_info(credenciais)
+
+
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+# from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
 from datetime import datetime
+
+
 
 # --- Conexão com Google Sheets ---
 scope = ["https://spreadsheets.google.com/feeds", 
