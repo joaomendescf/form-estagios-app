@@ -1,26 +1,23 @@
 import streamlit as st
-import json
-
-# Acessa o dicionário diretamente
-credenciais = st.secrets["google"]
-
-# Se precisar passar para JSON (por exemplo, Google API)
-credenciais_json = json.dumps(credenciais)
-
-
-
 import gspread
-# from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
 from datetime import datetime
+from google.oauth2.service_account import Credentials
+
+# --- Carregar credenciais do Streamlit Secrets ---
+credenciais = st.secrets["google"]
+
+# Escopos necessários para Google Sheets e Drive
+scopes = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+]
+
+# Criar credenciais a partir do dicionário
+credentials = Credentials.from_service_account_info(credenciais, scopes=scopes)
 
 # --- Conexão com Google Sheets ---
-scope = ["https://spreadsheets.google.com/feeds", 
-         "https://www.googleapis.com/auth/drive"]
-
-# Substitua pelo caminho do seu arquivo JSON de credenciais
-creds = ServiceAccountCredentials.from_json_keyfile_name("credenciais.json", scope)
-client = gspread.authorize(creds)
+client = gspread.authorize(credentials)
 
 # Substitua pelo ID da sua planilha
 sheet = client.open_by_key("15HwvTeGf07Z-C5pA3884MTJve_dwv8X58CwnNjHu89Y")
@@ -46,5 +43,9 @@ opcao_selecionada = st.radio(f"Escolha {coluna2}", opcoes)
 # Botão enviar
 if st.button("Enviar"):
     # Salvar no Google Sheets
-    worksheet.append_row([datetime.now().strftime("%d/%m/%Y %H:%M:%S"), empresa_selecionada, opcao_selecionada])
+    worksheet.append_row([
+        datetime.now().strftime("%d/%m/%Y %H:%M:%S"), 
+        empresa_selecionada, 
+        opcao_selecionada
+    ])
     st.success(f"Registrado: {empresa_selecionada} / {opcao_selecionada}")
