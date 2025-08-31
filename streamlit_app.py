@@ -3,9 +3,9 @@ import os
 import json
 
 # Pega o conteúdo da variável de ambiente
-credenciais_json = os.environ.get("GOOGLE_CREDENTIALS")
+# credenciais_json = os.environ.get("GOOGLE_CREDENTIALS")
 
-# Converte de string para dicionário
+credenciais_json = os.environ["GOOGLE_CREDENTIALS"]
 credenciais = json.loads(credenciais_json)
 
 # Agora você pode usar as credenciais normalmente
